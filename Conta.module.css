@@ -1,0 +1,49 @@
+import { buscarProduto, formatarPreco } from '../data/produtos.js'
+import styles from './Carrinho.module.css'
+
+export default function Carrinho({ itens, onAlterar }) {
+  const itensValidos = itens.map((item) => ({ ...item, produto: buscarProduto(item.id) })).filter((item) => item.produto)
+  const total = itensValidos.reduce((soma, item) => soma + item.produto.preco * item.quantidade, 0)
+
+  return (
+    <section className={styles.pagina}>
+      <div className={styles.cabecalho}>
+        <h1>CARRINHO</h1>
+        <div className={styles.linha} />
+        <p>Suas compras, suas<br /> escolhas.</p>
+      </div>
+      <div className={styles.acoes}>
+        <a href={itensValidos.length ? '#/pagamento' : '#/produtos'} className={styles.botao}>
+          {itensValidos.length ? 'FINALIZAR COMPRA' : 'VER PRODUTOS'}
+        </a>
+        <a href="#/produtos" className={styles.botao}>CONTINUAR COMPRANDO</a>
+      </div>
+      <div className={styles.lista}>
+        {itensValidos.length === 0 ? (
+          <div className={styles.vazio}>
+            <p>Seu carrinho está vazio.</p>
+            <a href="#/produtos">Escolher equipamentos</a>
+          </div>
+        ) : (
+          itensValidos.map(({ id, quantidade, produto }) => (
+            <article className={styles.item} key={id}>
+              <h2>{produto.nome}</h2>
+              <div className={styles.itemCorpo}>
+                <img src={produto.imagem} alt={produto.nome} />
+                <div className={styles.info}>
+                  <div className={styles.controles} aria-label={`Quantidade de ${produto.nome}`}>
+                    <button type="button" onClick={() => onAlterar(id, 1)} aria-label={`Adicionar uma unidade de ${produto.nome}`}>+</button>
+                    <span aria-live="polite">{quantidade}</span>
+                    <button type="button" onClick={() => onAlterar(id, -1)} aria-label={`Remover uma unidade de ${produto.nome}`}>−</button>
+                  </div>
+                  <p>Valor: {formatarPreco(produto.preco * quantidade)}</p>
+                </div>
+              </div>
+            </article>
+          ))
+        )}
+      </div>
+      {itensValidos.length > 0 && <p className={styles.total}>Total dos produtos: <strong>{formatarPreco(total)}</strong></p>}
+    </section>
+  )
+}

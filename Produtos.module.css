@@ -1,0 +1,15 @@
+import CategoriaTitulo from '../components/CategoriaTitulo.jsx'
+import CardProduto from '../components/CardProduto.jsx'
+import { maquinas } from '../data/produtos.js'
+import styles from './Maquinas.module.css'
+
+export default function Maquinas({ onAdicionar }) {
+  return (
+    <section className={styles.pagina}>
+      <CategoriaTitulo tipo="maquinas" />
+      <div className={styles.grade}>
+        {maquinas.map((produto) => <CardProduto key={produto.id} produto={produto} onAdicionar={onAdicionar} maquina />)}
+      </div>
+    </section>
+  )
+}

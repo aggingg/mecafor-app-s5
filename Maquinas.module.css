@@ -1,0 +1,123 @@
+import { useEffect, useState } from 'react'
+import styles from './App.module.css'
+import Inicio from './pages/Inicio.jsx'
+import Conta from './pages/Conta.jsx'
+import Produtos from './pages/Produtos.jsx'
+import Maquinas from './pages/Maquinas.jsx'
+import Sobre from './pages/Sobre.jsx'
+import Carrinho from './pages/Carrinho.jsx'
+import Pagamento from './pages/Pagamento.jsx'
+
+const CHAVE_CARRINHO = 'mecafor_carrinho'
+const CARRINHO_EXEMPLO = [
+  { id: 'maquina-arqueadora', quantidade: 1 },
+  { id: 'epi-profissional', quantidade: 1 },
+  { id: 'maquina-seladora-l', quantidade: 1 },
+]
+
+function lerCarrinho() {
+  try {
+    const salvo = localStorage.getItem(CHAVE_CARRINHO)
+    return salvo ? JSON.parse(salvo) : CARRINHO_EXEMPLO
+  } catch {
+    return CARRINHO_EXEMPLO
+  }
+}
+
+function rotaAtual() {
+  const rota = window.location.hash.replace(/^#/, '') || '/'
+  return rota.split('?')[0]
+}
+
+export function navegar(rota) {
+  window.location.hash = rota
+  window.scrollTo({ top: 0, behavior: 'instant' })
+}
+
+function Cabecalho({ rota }) {
+  const links = [
+    { nome: 'Carrinho', rota: '/carrinho' },
+    { nome: 'Home', rota: '/' },
+    { nome: 'Sobre', rota: '/sobre' },
+    { nome: 'Produtos', rota: '/produtos' },
+    { nome: 'Conta', rota: '/conta' },
+  ]
+  return (
+    <header className={styles.header}>
+      <a className={styles.marca} href="#/" aria-label="Mecafor - página inicial">
+        <img src="/images/simbolo-mecafor.png" alt="Símbolo da Mecafor" />
+      </a>
+      <nav className={styles.nav} aria-label="Navegação principal">
+        {links.filter((link) => !(rota === '/carrinho' && link.rota === '/carrinho')).map((link) => (
+          <a
+            href={`#${link.rota}`}
+            key={link.rota}
+            className={(rota === link.rota || (rota === '/maquinas' && link.rota === '/produtos')) ? styles.ativo : ''}
+            aria-current={rota === link.rota ? 'page' : undefined}
+          >
+            {link.nome}
+          </a>
+        ))}
+      </nav>
+    </header>
+  )
+}
+
+export default function App() {
+  const [rota, setRota] = useState(rotaAtual)
+  const [carrinho, setCarrinho] = useState(lerCarrinho)
+  const [aviso, setAviso] = useState('')
+
+  useEffect(() => {
+    const atualizarRota = () => { setRota(rotaAtual()); window.scrollTo(0, 0) }
+    window.addEventListener('hashchange', atualizarRota)
+    return () => window.removeEventListener('hashchange', atualizarRota)
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho))
+  }, [carrinho])
+
+  useEffect(() => {
+    if (!aviso) return
+    const timer = setTimeout(() => setAviso(''), 3000)
+    return () => clearTimeout(timer)
+  }, [aviso])
+
+  function adicionar(id) {
+    setCarrinho((itens) => {
+      const existente = itens.find((item) => item.id === id)
+      return existente
+        ? itens.map((item) => item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item)
+        : [...itens, { id, quantidade: 1 }]
+    })
+    setAviso('Produto adicionado ao carrinho!')
+  }
+
+  function alterarQuantidade(id, diferenca) {
+    setCarrinho((itens) => itens
+      .map((item) => item.id === id ? { ...item, quantidade: item.quantidade + diferenca } : item)
+      .filter((item) => item.quantidade > 0))
+  }
+
+  const telas = {
+    '/': <Inicio />,
+    '/conta': <Conta />,
+    '/produtos': <Produtos onAdicionar={adicionar} />,
+    '/maquinas': <Maquinas onAdicionar={adicionar} />,
+    '/sobre': <Sobre />,
+    '/carrinho': <Carrinho itens={carrinho} onAlterar={alterarQuantidade} />,
+    '/pagamento': <Pagamento />,
+  }
+  const semCabecalho = rota === '/' || rota === '/conta'
+
+  return (
+    <div className={styles.app}>
+      {!semCabecalho && <Cabecalho rota={rota} />}
+      <main className={styles.main} id="conteudo">
+        {telas[rota] ?? <Inicio />}
+      </main>
+      {aviso && <div className={styles.toast} role="status">{aviso} <a href="#/carrinho">Ver carrinho</a></div>}
+    </div>
+  )
+}
