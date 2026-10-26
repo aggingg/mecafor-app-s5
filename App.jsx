@@ -1,13 +1,18 @@
-.container { display: flex; align-items: center; color: #686868; gap: 13px; margin-bottom: 44px; }
-.ferramentas { width: 50px; height: 50px; flex-shrink: 0; }
-.container h1 { font-size: 25px; line-height: 1.13; letter-spacing: -.5px; margin: 0; font-weight: 700; }
-.opcoes { display: flex; gap: 12px; margin-left: auto; }
-.opcoes a { border: 1px solid #898989; padding: 8px 16px; border-radius: 20px; font-size: 13px; color: #3f4446; }
-.opcoes a:hover, .opcoes .selecionado { background: #ddd; }
-@media (max-width: 640px) {
-  .container { flex-wrap: wrap; margin-bottom: 26px; gap: 9px; }
-  .ferramentas { width: 37px; height: 37px; }
-  .container h1 { font-size: 18px; }
-  .opcoes { flex-basis: 100%; justify-content: end; }
-  .opcoes a { padding: 6px 12px; font-size: 12px; }
+import styles from './CategoriaTitulo.module.css'
+
+export default function CategoriaTitulo({ tipo }) {
+  const equipamentos = tipo === 'equipamentos'
+  return (
+    <div className={styles.container}>
+      <svg className={styles.ferramentas} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M11 7 7 11l9 9-6 6 12 12 6-6-12-12 6-6 9 9 4-4-9-9-4 4-11-11z"/>
+        <path d="M35 7c-7 0-11 7-9 13L10 36a5 5 0 0 0 7 7l16-16c6 2 13-2 13-9l-8 7-7-7z"/>
+      </svg>
+      <h1>{equipamentos ? <>Equipamentos<br />industriais</> : <>Máquinas<br />industriais</>}</h1>
+      <div className={styles.opcoes} aria-label="Categorias">
+        <a className={equipamentos ? styles.selecionado : ''} href="#/produtos">EPIs</a>
+        <a className={!equipamentos ? styles.selecionado : ''} href="#/maquinas">Máquinas</a>
+      </div>
+    </div>
+  )
 }

@@ -1,0 +1,35 @@
+import { useState } from 'react'
+import styles from './Pagamento.module.css'
+
+const opcoes = ['Pix', 'Cartão de Crédito', 'Cartão de Débito']
+
+export default function Pagamento() {
+  const [selecionado, setSelecionado] = useState('')
+
+  return (
+    <section className={styles.pagina}>
+      <div className={styles.cabecalho}>
+        <h1>FORMAS DE<br /> PAGAMENTO</h1>
+        <div className={styles.linha} />
+        <p>Escolha como quer<br /> pagar.</p>
+      </div>
+      <fieldset className={styles.opcoes}>
+        <legend className={styles.oculto}>Escolha a forma de pagamento</legend>
+        {opcoes.map((opcao) => (
+          <label className={`${styles.opcao} ${selecionado === opcao ? styles.selecionada : ''}`} key={opcao}>
+            <input type="radio" name="forma-pagamento" value={opcao} checked={selecionado === opcao} onChange={() => setSelecionado(opcao)} />
+            <span className={styles.faixa} aria-hidden="true" />
+            <span className={styles.nome}>{opcao}</span>
+            {selecionado === opcao && <span className={styles.check} aria-hidden="true">✓</span>}
+          </label>
+        ))}
+      </fieldset>
+      {selecionado && <p className={styles.aviso} role="status">{selecionado} selecionado. O pagamento real precisará ser integrado a um serviço de checkout.</p>}
+      <div className={styles.separador} />
+      <div className={styles.links}>
+        <a href="#/produtos">CONTINUAR COMPRANDO</a>
+        <a href="#/carrinho">IR PARA O CARRINHO</a>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,57 @@
+.pagina {
+  min-height: 100vh;
+  padding: clamp(65px, 11vh, 120px) 28px 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo { width: clamp(240px, 30vw, 390px); margin-bottom: clamp(42px, 9vh, 86px); }
+.conteudo { width: min(100%, 1080px); display: grid; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); align-items: center; gap: clamp(35px, 7vw, 105px); }
+.formulario {
+  position: relative;
+  width: min(100%, 390px);
+  min-height: 300px;
+  padding: 42px clamp(22px, 3vw, 55px) 26px;
+  border-radius: 24px;
+  background: #dfdfdf;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 27px;
+  margin-inline: auto;
+}
+.etiqueta {
+  position: absolute;
+  top: -39px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid #676767;
+  border-radius: 9px;
+  background: #dedede;
+  padding: 9px 22px;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+}
+.campo { width: 100%; min-width: 0; height: 46px; border: 1px solid #777; border-radius: 6px; display: flex; align-items: center; overflow: hidden; }
+.icone { display: grid; place-items: center; width: 44px; height: 32px; border-right: 1px solid #969696; color: #8c9195; font-size: 23px; flex-shrink: 0; }
+.icone svg { width: 21px; height: 21px; }
+.campo input { min-width: 0; height: 100%; border: 0; background: transparent; padding: 6px 10px; outline: 0; flex: 1; font-size: 14px; }
+.campo input::placeholder { color: #5c5c5c; opacity: 1; }
+.botao { border: 1px solid #606060; color: #606060; background: transparent; font-weight: 700; padding: 8px 34px; border-radius: 32px; transition: background .15s; }
+.botao:hover { background: #cecece; }
+.divisoria { height: 330px; background: #626262; }
+.acessoLivre { font-size: 12px; text-decoration: underline; margin-top: -10px; }
+.mensagem { margin-top: 28px; background: #dfdfdf; border-radius: 10px; padding: 12px 18px; text-align: center; max-width: 600px; }
+.oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 760px) {
+  .pagina { padding-top: 50px; }
+  .conteudo { display: flex; flex-direction: column; gap: 70px; }
+  .divisoria { height: 1px; width: min(360px, 80vw); }
+  .formulario { min-height: 290px; }
+  .logo { margin-bottom: 72px; }
+}

@@ -1,73 +1,38 @@
-import { useState } from 'react'
-import styles from './Conta.module.css'
-
-function IconeCampo({ tipo }) {
-  return tipo === 'senha' ? (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V7a3 3 0 0 0-6 0v3z" />
-    </svg>
-  ) : (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <circle cx="12" cy="7" r="5" />
-      <path d="M2 23c0-6 4.2-9 10-9s10 3 10 9H2z" />
-    </svg>
-  )
-}
-
-function Campo({ tipo = 'text', placeholder, icone, value, onChange, autoComplete }) {
-  return (
-    <label className={styles.campo}>
-      <span className={styles.icone}><IconeCampo tipo={icone} /></span>
-      <span className={styles.oculto}>{placeholder}</span>
-      <input type={tipo} placeholder={placeholder} value={value} onChange={onChange} autoComplete={autoComplete} required />
-    </label>
-  )
-}
-
-export default function Conta() {
-  const [nomeLogin, setNomeLogin] = useState('')
-  const [senhaLogin, setSenhaLogin] = useState('')
-  const [nomeCadastro, setNomeCadastro] = useState('')
-  const [senhaCadastro, setSenhaCadastro] = useState('')
-  const [confirmacao, setConfirmacao] = useState('')
-  const [mensagem, setMensagem] = useState('')
-
-  function entrar(evento) {
-    evento.preventDefault()
-    // Protótipo de interface: nenhum dado sensível é salvo localmente.
-    setMensagem('Login demonstrativo. Conecte um backend para autenticar usuários de verdade.')
-  }
-
-  function cadastrar(evento) {
-    evento.preventDefault()
-    if (senhaCadastro !== confirmacao) {
-      setMensagem('As senhas informadas não coincidem.')
-      return
-    }
-    setMensagem('Cadastro demonstrativo. Conecte um backend para salvar a conta com segurança.')
-  }
-
-  return (
-    <section className={styles.pagina}>
-      <img className={styles.logo} src="/images/logo-mecafor.png" alt="Mecafor Equipamentos Industriais" />
-      <div className={styles.conteudo}>
-        <form className={styles.formulario} onSubmit={entrar}>
-          <h1 className={styles.etiqueta}>Já possui uma conta?</h1>
-          <Campo placeholder="Nome de usuário" icone="usuario" value={nomeLogin} onChange={(e) => setNomeLogin(e.target.value)} autoComplete="username" />
-          <Campo tipo="password" placeholder="Senha" icone="senha" value={senhaLogin} onChange={(e) => setSenhaLogin(e.target.value)} autoComplete="current-password" />
-          <button className={styles.botao} type="submit">ENTRAR</button>
-          <a className={styles.acessoLivre} href="#/produtos">Ver produtos sem entrar</a>
-        </form>
-        <div className={styles.divisoria} aria-hidden="true" />
-        <form className={styles.formulario} onSubmit={cadastrar}>
-          <h2 className={styles.etiqueta}>Não possui uma conta?</h2>
-          <Campo placeholder="Nome de usuário" icone="usuario" value={nomeCadastro} onChange={(e) => setNomeCadastro(e.target.value)} autoComplete="username" />
-          <Campo tipo="password" placeholder="Digite sua senha" icone="senha" value={senhaCadastro} onChange={(e) => setSenhaCadastro(e.target.value)} autoComplete="new-password" />
-          <Campo tipo="password" placeholder="Confirme sua senha" icone="senha" value={confirmacao} onChange={(e) => setConfirmacao(e.target.value)} autoComplete="new-password" />
-          <button className={styles.botao} type="submit">CADASTRAR</button>
-        </form>
-      </div>
-      {mensagem && <p role="status" className={styles.mensagem}>{mensagem}</p>}
-    </section>
-  )
+.pagina { min-height: calc(100vh - 82px); width: min(1180px, 100%); margin: auto; padding: 55px 24px 100px; }
+.cabecalho { text-align: center; color: var(--texto-acento); }
+.cabecalho h1 { margin: 0; font-size: clamp(53px, 7vw, 87px); line-height: 1; font-weight: 700; letter-spacing: 2px; }
+.linha { height: 1px; background: #6f7579; width: min(590px, 80%); margin: 14px auto 16px; }
+.cabecalho p { font-size: 24px; line-height: 1.2; letter-spacing: 1px; margin: 0; }
+.acoes { display: flex; justify-content: space-between; width: min(850px, 90%); margin: 40px auto 95px; gap: 20px; }
+.botao { min-width: 230px; text-align: center; border: 1px solid #a9adb1; background: #d8d9da; border-radius: 9px; padding: 15px 20px; font-weight: 700; font-size: 13px; color: #484848; box-shadow: 0 4px 2px #0002; }
+.botao:hover { background: #ededed; }
+.lista { display: flex; flex-direction: column; align-items: center; gap: 72px; }
+.item { width: min(730px, 100%); padding: 14px 22px 25px; min-height: 222px; border-radius: 10px; border: 1px solid #a5a8ad; background: #d4d6d8; box-shadow: 0 3px 2px #0003; }
+.item h2 { font: 18px Georgia, 'Times New Roman', serif; font-weight: 400; margin: 0 0 18px; }
+.itemCorpo { display: flex; align-items: center; gap: 45px; }
+.itemCorpo img { width: 215px; height: 135px; object-fit: contain; border: 1px solid #d1d1d1; border-radius: 12px; box-shadow: 0 3px 2px #0003; background: white; }
+.info { display: flex; flex-direction: column; gap: 20px; }
+.controles { display: flex; align-items: center; gap: 25px; }
+.controles button { width: 48px; height: 44px; border: 1px solid #b3b8be; border-radius: 6px; background: #d5d7da; box-shadow: 0 3px 1px #0003; font-size: 39px; font-weight: 700; line-height: 32px; padding: 0; display: grid; place-items: center; }
+.controles button:hover { background: #edf0f2; }
+.controles span { min-width: 20px; font: 16px Georgia, serif; text-align: center; }
+.info p { margin: 0; font: 18px Georgia, 'Times New Roman', serif; }
+.total { text-align: center; font-size: 19px; margin: 42px 0 0; color: #42464a; }
+.vazio { padding: 42px; text-align: center; background: #ddd; border-radius: 12px; }
+.vazio a { display: inline-block; margin-top: 10px; text-decoration: underline; }
+@media (max-width: 640px) {
+  .pagina { padding-top: 45px; }
+  .cabecalho h1 { font-size: 50px; }
+  .cabecalho p { font-size: 18px; }
+  .acoes { width: 100%; flex-wrap: wrap; justify-content: center; margin: 34px auto 55px; }
+  .botao { min-width: 180px; font-size: 12px; }
+  .lista { gap: 25px; }
+  .item { padding: 15px; min-height: 0; }
+  .item h2 { font-size: 15px; }
+  .itemCorpo { gap: 15px; }
+  .itemCorpo img { width: min(42%, 170px); height: 108px; }
+  .controles { gap: 9px; }
+  .controles button { width: 33px; height: 33px; font-size: 27px; line-height: 27px; }
+  .info { gap: 15px; }
+  .info p { font-size: 13px; }
 }
